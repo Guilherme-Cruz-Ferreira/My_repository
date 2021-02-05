@@ -1,2 +1,3 @@
-# My_repository
- primeiro repositório versionado
+# Meu repositório
+primeiro repositório versionado
+criado para abrigar projetos em python
