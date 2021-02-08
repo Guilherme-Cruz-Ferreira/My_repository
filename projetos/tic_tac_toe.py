@@ -48,7 +48,7 @@ def Jogo():
             else:
                 print('marcador não encontrado, favor selecionar um existente!')
     
-    printGuia
+    printGuia()
 
     while y:
         if cont % 2 == 0:
