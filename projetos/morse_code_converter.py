@@ -10,7 +10,6 @@ s2m = {'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.',\
     '8':'---..','9':'----.','0':'-----'}
 upca = list(string.ascii_uppercase)
 t = True
-
 while t:
     aux = []
     f = []
@@ -40,13 +39,9 @@ while t:
                     print(p, end=' ')
                 o = False
         elif op == '2':
-            
             inp = str(input('\ninsira o texto a ser decodificado: '))
-
             aux = inp.split(' ')
-
             # print(aux)
-            
             for m in aux:
                 for k, v in s2m.items():
                     if v == m:
@@ -58,7 +53,6 @@ while t:
                 for p in f:
                     print(p, end=' ')
                 o = False
-        
         else:
             print('\033[31mFavor digitar um valor válido\033[m')
 
