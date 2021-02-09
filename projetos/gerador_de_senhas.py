@@ -9,13 +9,9 @@ def printList(lst):
         else:
             print(v, end='')
     
-
 dc = ''
 arm = list()
-
-
 t = True
-
 while t:
     
     nesse = True
@@ -25,7 +21,6 @@ while t:
     mesclagem_digito_maiuscula = list()
     mesclagem_digito_minuscula = list()
     arm = list()            
-    
     
     alfabeto_caixa_baixa = list(string.ascii_lowercase)
     alfabeto_caixa_alta = list(string.ascii_uppercase)
