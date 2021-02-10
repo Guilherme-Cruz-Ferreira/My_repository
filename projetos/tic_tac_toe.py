@@ -1,5 +1,5 @@
 # jogo da velha/tic tac toe
-
+# empate: 1 5 7 4 6 8 2 3 9
 # variáveis
 p1 = p2 = 0 
 tabuleiro = [1, 2, 3,\
@@ -33,9 +33,19 @@ def selection():
                 print('marcador não encontrado, favor selecionar um existente!')
 
 
+def isbordfull(bi):
+    bd = bi[:]
+    o = 0
+    for n in bd:
+        if n == 'X' or n == 'O':
+            o += 1
+    if o == len(bd):
+        return True 
+
+
 def condVitoria(bo):
     k = 0
-    board = bo[:]
+    board = bo
     if board[0] == board[1] == board[2] == 'X' or board[0] == board[1] == board[2] == 'O':
         banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
         return True
@@ -60,14 +70,9 @@ def condVitoria(bo):
     elif board[6] == board[4] == board[2] == 'X' or board[6] == board[4] == board[2] == 'O':
         banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
         return True
-    for n in board:
-        if isinstance(n, str): 
-            k += 1
-        else:
-            continue
-    if k == 9:
-        banner('Empate!!')
-        return True
+    if isbordfull(board):
+        return 'E'
+    
    
 
 def npc(tab, tab2):
@@ -115,8 +120,13 @@ def insereTabuleiro(Q1, Q2):
             printTabuleiro2()
             # condições vitória/empate
             x = condVitoria(tabuleiro)
+            print(type(x), x)
             if x:
                 y = False
+            if x == 'E':
+                banner('Empate')
+                y = False
+
         else:
             if n in range(1, 10):
                 print('\n\033[31mlocalização já está em uso!\033[m')
@@ -135,8 +145,6 @@ def printGuia(pg=False):
     print(f'{tabuleiro[3]} {tabuleiro[4]} {tabuleiro[5]}'.center(19))
     print(f'{tabuleiro[6]} {tabuleiro[7]} {tabuleiro[8]}'.center(19))
 
-
-#def printVitoriaColorida()
 
 def printTabuleiro2():
     print(tabuleiro2[0], tabuleiro2[1], tabuleiro2[2])
@@ -166,5 +174,4 @@ def Jogo():
         cond = False
 
 banner('Jogo da velha')
-    
 Jogo()
