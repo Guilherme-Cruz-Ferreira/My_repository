@@ -32,6 +32,19 @@ def selection():
             else:
                 print('marcador não encontrado, favor selecionar um existente!')
 
+#def tabuleiroVirtual():
+
+
+
+def npc(tab, tab2):
+    aux2 = tab2[:]
+    aux = tab
+    pontos_disponiveis = list()
+    for i, v in enumerate(aux):
+        if v != '•' and v != 'X' and v != 'O':
+            pontos_disponiveis.append(v)
+    return pontos_disponiveis
+    
 
 def condVitorias(Q1, Q2):
     y = True
@@ -40,16 +53,20 @@ def condVitorias(Q1, Q2):
     cond = m = True
     q1 = Q1
     q2 = Q2
-    while y: # teste 
+    while y: # teste
+        j1 = npc(tab=tabuleiro, tab2=tabuleiro2) 
+        print(f'Disponíveis: {j1}')
         if cont % 2 == 0:
             jogador_da_vez = q1
         else:
             jogador_da_vez = q2
         while True:
-            n = str(input(f'por favor, digite o local onde o \033[32m{jogador_da_vez}\033[m vai ser colocado: '))
+            n = str(input(f'por favor, digite o local onde o \033[32m{jogador_da_vez}\033[m vai ser colocado\n(digite G para mostra a guia do tabuleiro)\n>>> ')).lower().strip()
             if n.isnumeric():
                 n = int(n)
                 break
+            elif n == 'G':
+                printGuia()
             else:
                 print('Favor, digitar uma posição válida!!')
                 print('As posições válidas são: ')
@@ -95,6 +112,8 @@ def condVitorias(Q1, Q2):
             if k == 9:
                 banner('Empate!!')
                 y = False      
+        
+            
             k = 0
             cont += 1
         else:
@@ -115,6 +134,8 @@ def printGuia(pg=False):
     print(f'{tabuleiro[3]} {tabuleiro[4]} {tabuleiro[5]}'.center(19))
     print(f'{tabuleiro[6]} {tabuleiro[7]} {tabuleiro[8]}'.center(19))
 
+
+#def printVitoriaColorida()
 
 def printTabuleiro2():
     print(tabuleiro2[0], tabuleiro2[1], tabuleiro2[2])
