@@ -1,7 +1,7 @@
 # jogo da velha/tic tac toe
 
 # variáveis
-p1 = p2 = 0
+p1 = p2 = 0 
 tabuleiro = [1, 2, 3,\
              4, 5, 6,\
              7, 8, 9]
@@ -32,9 +32,43 @@ def selection():
             else:
                 print('marcador não encontrado, favor selecionar um existente!')
 
-#def tabuleiroVirtual():
 
-
+def condVitoria(bo):
+    k = 0
+    board = bo[:]
+    if board[0] == board[1] == board[2] == 'X' or board[0] == board[1] == board[2] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
+        return True
+    elif board[3] == board[4] == board[5] == 'X' or board[3] == board[4] == board[5] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[3]}!!\033[m')
+        return True
+    elif board[6] == board[7] == board[8] == 'X' or board[6] == board[7] == board[8] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
+        return True
+    elif board[0] == board[3] == board[6] == 'X' or board[0] == board[3] == board[6] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
+        return True
+    elif board[1] == board[4] == board[7] == 'X' or board[1] == board[4] == board[7] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[3]}!!\033[m')
+        return True
+    elif board[2] == board[5] == board[8] == 'X' or board[2] == board[5] == board[8] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
+        return True
+    elif board[0] == board[4] == board[8] == 'X' or board[0] == board[4] == board[8] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
+        return True
+    elif board[6] == board[4] == board[2] == 'X' or board[6] == board[4] == board[2] == 'O':
+        banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
+        return True
+    for n in board:
+        if isinstance(n, str): 
+            k += 1
+        else:
+            continue
+    if k == 9:
+        banner('Empate!!')
+        return True
+   
 
 def npc(tab, tab2):
     aux2 = tab2[:]
@@ -46,10 +80,11 @@ def npc(tab, tab2):
     return pontos_disponiveis
     
 
-def condVitorias(Q1, Q2):
+def insereTabuleiro(Q1, Q2):
     y = True
+    x = False
     cont = 2
-    k = 0
+    
     cond = m = True
     q1 = Q1
     q2 = Q2
@@ -68,7 +103,6 @@ def condVitorias(Q1, Q2):
             elif n == 'G':
                 printGuia()
             else:
-                print('Favor, digitar uma posição válida!!')
                 print('As posições válidas são: ')
                 printGuia()
                 
@@ -80,42 +114,9 @@ def condVitorias(Q1, Q2):
             tabuleiro.insert(u, jogador_da_vez)
             printTabuleiro2()
             # condições vitória/empate
-            if tabuleiro[0] == tabuleiro[1] == tabuleiro[2]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[0]}!!\033[m')
+            x = condVitoria(tabuleiro)
+            if x:
                 y = False
-            elif tabuleiro[3] == tabuleiro[4] == tabuleiro[5]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[0]}!!\033[m')
-                y = False
-            elif tabuleiro[6] == tabuleiro[7] == tabuleiro[8]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[0]}!!\033[m')
-                y = False
-            elif tabuleiro[0] == tabuleiro[1] == tabuleiro[2]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[0]}!!\033[m')
-                y = False
-            elif tabuleiro[3] == tabuleiro[4] == tabuleiro[5]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[3]}!!\033[m')
-                y = False
-            elif tabuleiro[6] == tabuleiro[7] == tabuleiro[8]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[6]}!!\033[m')
-                y = False
-            elif tabuleiro[0] == tabuleiro[4] == tabuleiro[8]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[0]}!!\033[m')
-                y = False
-            elif tabuleiro[6] == tabuleiro[4] == tabuleiro[2]:
-                banner(f'\033[32mO vencedor foi o {tabuleiro[6]}!!\033[m')
-                y = False
-            for n in tabuleiro:
-                if isinstance(n, str): 
-                    k += 1
-                else:
-                    continue
-            if k == 9:
-                banner('Empate!!')
-                y = False      
-        
-            
-            k = 0
-            cont += 1
         else:
             if n in range(1, 10):
                 print('\n\033[31mlocalização já está em uso!\033[m')
@@ -125,7 +126,7 @@ def condVitorias(Q1, Q2):
                 print('\033[31mlocalização não encontrada!\033[m')
                 print('localizações disponíveis: ')
                 printGuia()
-
+        cont += 1
 
 def printGuia(pg=False):
     if pg == True:
@@ -154,11 +155,11 @@ def Jogo():
         if gm == '1':
             q1, q2 = selection() #q2 sempre vai ser o npc
             printGuia(pg=True)
-            condVitorias(q1, q2)
+            insereTabuleiro(q1, q2)
         elif gm == '2':
             q1, q2 = selection() #q2 sempre vai ser o npc
             printGuia(pg=True)
-            condVitorias(q1, q2)
+            insereTabuleiro(q1, q2)
         else:
             print('Favor selecionar uma opção válida!')
             continue
