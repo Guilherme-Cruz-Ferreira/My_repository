@@ -15,6 +15,20 @@ def banner(txt, np=60):
     print(txt.center(np))
     print('-'*np)
 
+def tabVirtual(lis, qPLAYER, qNPC): 
+    import random
+    ctab = lis[:]
+    for n in ctab:
+        if n != 'X' and n != 'O': # if espaço vazio
+            ctab.pop(n)
+            ctab.insert(n, qNPC)
+            if condVitoria(ctab, qNPC):
+                return n
+            else:
+                axu = list(Pdisponiveis(lis))
+                return random.choice(axu)
+
+                
 
 def selection():
     tset = True
@@ -43,74 +57,82 @@ def isbordfull(bi):
         return True 
 
 
-def condVitoria(bo):
+def condVitoria(bo, jdv):
     k = 0
     board = bo
-    if board[0] == board[1] == board[2] == 'X' or board[0] == board[1] == board[2] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
+    if board[0] == board[1] == board[2] == jdv: 
         return True
-    elif board[3] == board[4] == board[5] == 'X' or board[3] == board[4] == board[5] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[3]}!!\033[m')
+    elif board[3] == board[4] == board[5] == jdv:
         return True
-    elif board[6] == board[7] == board[8] == 'X' or board[6] == board[7] == board[8] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
+    elif board[6] == board[7] == board[8] == jdv:
         return True
-    elif board[0] == board[3] == board[6] == 'X' or board[0] == board[3] == board[6] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
+    elif board[0] == board[3] == board[6] == jdv:
         return True
-    elif board[1] == board[4] == board[7] == 'X' or board[1] == board[4] == board[7] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[3]}!!\033[m')
+    elif board[1] == board[4] == board[7] == jdv:
         return True
-    elif board[2] == board[5] == board[8] == 'X' or board[2] == board[5] == board[8] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
+    elif board[2] == board[5] == board[8] == jdv:
         return True
-    elif board[0] == board[4] == board[8] == 'X' or board[0] == board[4] == board[8] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[0]}!!\033[m')
+    elif board[0] == board[4] == board[8] == jdv:
         return True
-    elif board[6] == board[4] == board[2] == 'X' or board[6] == board[4] == board[2] == 'O':
-        banner(f'\033[32mO vencedor foi o {board[6]}!!\033[m')
+    elif board[6] == board[4] == board[2] == jdv:
         return True
     if isbordfull(board):
         return 'E'
     
-   
 
-def npc(tab, tab2):
-    aux2 = tab2[:]
+def Pdisponiveis(tab): # Retorna pontos disponíveis em lista
     aux = tab
     pontos_disponiveis = list()
     for i, v in enumerate(aux):
         if v != '•' and v != 'X' and v != 'O':
             pontos_disponiveis.append(v)
     return pontos_disponiveis
-    
 
-def insereTabuleiro(Q1, Q2):
+
+def FazJogadas(Q1, Q2, NPC=False):
     y = True
     x = False
     cont = 2
-    
     cond = m = True
     q1 = Q1
     q2 = Q2
-    while y: # teste
-        j1 = npc(tab=tabuleiro, tab2=tabuleiro2) 
+    while y: # faz as jogadas
+        
+        j1 = Pdisponiveis(tab=tabuleiro) 
         print(f'Disponíveis: {j1}')
+        
         if cont % 2 == 0:
             jogador_da_vez = q1
         else:
             jogador_da_vez = q2
+            
         while True:
-            n = str(input(f'por favor, digite o local onde o \033[32m{jogador_da_vez}\033[m vai ser colocado\n(digite G para mostra a guia do tabuleiro)\n>>> ')).lower().strip()
-            if n.isnumeric():
-                n = int(n)
-                break
-            elif n == 'G':
-                printGuia()
-            else:
-                print('As posições válidas são: ')
-                printGuia()
-                
+            if not NPC:
+                n = str(input(f'por favor, digite o local onde o \033[32m{jogador_da_vez}\033[m vai ser colocado\n(digite G para mostra a guia do tabuleiro)\n>>> ')).lower().strip() # se gm == sp - só aparece na vez do jogador (q1)
+                if n.isnumeric():
+                    n = int(n)
+                    break
+                elif n == 'G':
+                    printGuia()
+                else:
+                    print('As posições válidas são: ')
+                    printGuia()
+            elif NPC:
+                if jogador_da_vez == q1:
+                    n = str(input(f'por favor, digite o local onde o \033[32m{jogador_da_vez}\033[m vai ser colocado\n(digite G para mostra a guia do tabuleiro)\n>>> ')).lower().strip() # se gm == sp - só aparece na vez do jogador (q1)
+                    if n.isnumeric():
+                        n = int(n)
+                        break
+                    elif n == 'G':
+                        printGuia()
+                    else:
+                        print('As posições válidas são: ')
+                        printGuia()
+                elif jogador_da_vez == q2:
+                    n = tabVirtual(tabuleiro, q1, q2)
+                    break
+                else:
+                    print('não encontrado')
         if n in tabuleiro:
             u = tabuleiro.index(n)
             tabuleiro2.pop(u)
@@ -118,15 +140,14 @@ def insereTabuleiro(Q1, Q2):
             tabuleiro2.insert(u, jogador_da_vez)
             tabuleiro.insert(u, jogador_da_vez)
             printTabuleiro2()
-            # condições vitória/empate
-            x = condVitoria(tabuleiro)
-            print(type(x), x)
+            x = condVitoria(tabuleiro, jogador_da_vez)
             if x:
+                printTabuleiro2
+                banner(f'O vencedor foi o \033[32m{jogador_da_vez}!!\033[m')
                 y = False
             if x == 'E':
                 banner('Empate')
                 y = False
-
         else:
             if n in range(1, 10):
                 print('\n\033[31mlocalização já está em uso!\033[m')
@@ -137,6 +158,7 @@ def insereTabuleiro(Q1, Q2):
                 print('localizações disponíveis: ')
                 printGuia()
         cont += 1
+
 
 def printGuia(pg=False):
     if pg == True:
@@ -161,17 +183,18 @@ def Jogo():
         gm = str(input('1 - modo single-player\n2 - modo multi-player\n>>>'))
 
         if gm == '1':
-            q1, q2 = selection() #q2 sempre vai ser o npc
+            q1, q2 = selection() #q2 sempre vai ser o
             printGuia(pg=True)
-            insereTabuleiro(q1, q2)
+            FazJogadas(q1, q2, NPC=True)
         elif gm == '2':
             q1, q2 = selection() #q2 sempre vai ser o npc
             printGuia(pg=True)
-            insereTabuleiro(q1, q2)
+            FazJogadas(q1, q2)
         else:
             print('Favor selecionar uma opção válida!')
             continue
         cond = False
+
 
 banner('Jogo da velha')
 Jogo()
