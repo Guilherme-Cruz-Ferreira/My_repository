@@ -1,6 +1,4 @@
 # jogo da velha/tic tac toe
-# empate: 1 5 7 4 6 8 2 3 9
-# variáveis
 p1 = p2 = 0 
 tabuleiro = [1, 2, 3,\
              4, 5, 6,\
@@ -15,6 +13,7 @@ def banner(txt, np=60):
     print(txt.center(np))
     print('-'*np)
 
+
 def tabVirtual(tab, qNPC, qPLAYER): 
     import random 
     mp = [qNPC, qPLAYER]
@@ -24,20 +23,13 @@ def tabVirtual(tab, qNPC, qPLAYER):
         for i, v in enumerate(tab):
             if v in range(1, 10):
                 copiaTabuleiro = tab[:]
-                # print(f'pd: {pd}')
-                # print(f'copiaTabuleiro: {copiaTabuleiro}')
-                # print(f'i: {i}')
-                # print(f'g: {g}')
                 copiaTabuleiro[i] = g
-                
                 if condVitoria(copiaTabuleiro, g) == True:
-                    print('retornou na condição de vitória')
                     if i != 9:
                         movimento = i+1
                     else:
                         movimento = i
                     return movimento
-    
     cantos = []
     for i, v in enumerate(pd):
         if v in [1, 3, 7, 9]:
@@ -45,29 +37,25 @@ def tabVirtual(tab, qNPC, qPLAYER):
     
     if len(cantos) > 1:
         movimento = random.choice(cantos) 
-        print('retornou em cantos')
         return movimento
     else:
-        print('retornou em cantos')
         movimento = cantos[0]
         return movimento
-
     for i, v in enumerate(pd):
         if v == 5:
             movimento = v
-            print('retornou 5')
             return movimento
-    
     meios = []
     for i, v in enumerate(pd):
-        if v in (2, 4, 6, 8):
+        if v in [2, 4, 6, 8]:
             meios.append(v)
-            movimento = random.choice(meios)
-            print('retornou meios')
-            return movimento
-    
+    if len(meios) > 1:
+        movimento = random.choice(meios) 
+        return movimento
+    else:
+        movimento = meios[0]
+        return movimento
     return random.choice(pd)
-
        
 
 def selection():
@@ -127,41 +115,32 @@ def Pdisponiveis(tab): # Retorna pontos disponíveis em lista
 
 
 def FazJogadas(Q1, Q2, NPC=False):
-    y = True
+    cond = m = y = True
     x = False
     cont = 2
-    cond = m = True
     q1 = Q1
     q2 = Q2
-    while y: # faz as jogadas
-        
+    while y:
         j1 = Pdisponiveis(tab=tabuleiro) 
-        #print(f'Disponíveis: {j1}')
-        
         if cont % 2 == 0:
             jogador_da_vez = q1
         else:
             jogador_da_vez = q2
-            
         while True:
             if not NPC:
-                n = str(input(f'por favor, digite o local onde o \033[32m{jogador_da_vez}\033[m vai ser colocado\n(digite G para mostra a guia do tabuleiro)\n>>> ')).lower().strip() # se gm == sp - só aparece na vez do jogador (q1)
+                n = str(input(f'PLAYER [{jogador_da_vez}]>>>')).lower().strip()
                 if n.isnumeric():
                     n = int(n)
                     break
-                elif n == 'G':
-                    printGuia()
                 else:
                     print('As posições válidas são: ')
                     printGuia()
             elif NPC:
                 if jogador_da_vez == q1:
-                    n = str(input(f'>>> ')).lower().strip() # se gm == sp - só aparece na vez do jogador (q1)
+                    n = str(input(f'[PLAYER]>>>')).lower().strip() 
                     if n.isnumeric():
                         n = int(n)
                         break
-                    elif n == 'G':
-                        printGuia()
                     else:
                         print('As posições válidas são: ')
                         printGuia()
@@ -169,11 +148,6 @@ def FazJogadas(Q1, Q2, NPC=False):
                     if isinstance(n, int):
                         n = tabVirtual(tabuleiro, q2, q1)
                         break
-                    else:
-                        print(n)
-                        quebra = input('quebra')
-                        print('erro na 136, amigo')
-                        y = False
                 else:
                     print('não encontrado')
         if n in tabuleiro:
@@ -183,7 +157,7 @@ def FazJogadas(Q1, Q2, NPC=False):
             tabuleiro2.insert(u, jogador_da_vez)#insere no indice u
             tabuleiro.insert(u, jogador_da_vez)
             if jogador_da_vez == q2:
-                print(f'npc jogou no {n}')
+                print(f'[NPC]>>>{n}')
             printTabuleiro2()
             x = condVitoria(tabuleiro, jogador_da_vez)
             cont += 1
@@ -191,23 +165,22 @@ def FazJogadas(Q1, Q2, NPC=False):
                 print('------')
                 printTabuleiro2()
                 print('------')
-                banner(f'O vencedor foi o \033[32m{jogador_da_vez}!!\033[m')
+                banner(f'O vencedor foi o {jogador_da_vez}!!')
                 y = False
             if isbordfull(tabuleiro):
-                printTabuleiro2()
+                
                 banner('Empate')
                 y = False
         else:
             if n in range(1, 10):
-                print('\n\033[31mlocalização já está em uso!\033[m')
+                print('localização já está em uso!')
                 print('localizações disponíveis:')
                 printGuia()
             else:
-                print('\033[31mlocalização não encontrada!\033[m')
+                print('localização não encontrada!')
                 print('localizações disponíveis: ')
                 printGuia()
         
-
 
 def printGuia(pg=False):
     if pg == True:
@@ -224,13 +197,13 @@ def printTabuleiro2():
 
 
 def Jogo():
+    banner('Jogo da velha')
     y = True
     cont = 2
     k = 0
     cond = True
     while cond:
         gm = str(input('1 - modo single-player\n2 - modo multi-player\n>>>'))
-
         if gm == '1':
             q1, q2 = selection() #q2 sempre vai ser o
             printGuia(pg=True)
@@ -245,5 +218,4 @@ def Jogo():
         cond = False
 
 
-banner('Jogo da velha')
 Jogo()
